@@ -81,8 +81,7 @@ class _IndexPageState extends State<IndexPage> {
             children: <Widget>[
               Container(
                 alignment: Alignment.center,
-                child: Image.network(
-                    'https://swiftclub.loveli.site/assets/images/swift_logo.png'),
+                child: Image.asset('images/swift_logo.png'),
                 width: 100,
                 height: 100,
               ),

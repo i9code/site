@@ -21,7 +21,7 @@ class SwiftClub extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'SwiftClub',
+      title: 'swiftclub',
       onGenerateRoute: (settings) {
         dynamic args = settings.arguments;
         switch (settings.name) {
@@ -35,7 +35,7 @@ class SwiftClub extends StatelessWidget {
               // 如果刷新了，这个参数可能不存在，返回首页
               return SimpleRoute(
                   name: '/',
-                  title: 'swiftclub',
+                  title: 'Swiftclub',
                   builder: (context) => IndexPage());
             }
             final topicId = SafeValue.toInt(args['topicId']);

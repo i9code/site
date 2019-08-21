@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter_web/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:swiftclub/kit/macro/macro.dart';
 
 class Network {
   /// 业务接口
@@ -13,10 +15,23 @@ class Network {
     return getReq('/topic/$topicId');
   }
 
+  static userLogin({@required String email, @required String passwd}) {
+    return _postReq('/users/login',
+        params: {'email': email, 'password': passwd});
+  }
+
+  static userRegister(
+      {@required String email,
+      @required String name,
+      @required String passwd}) {
+    return _postReq('/users/register',
+        params: {'email': email, 'name': name, 'password': passwd});
+  }
+
   /// 接口封装
 
   static getReq(String url, {Map params, Map headers}) async {
-    var fullUrl = 'https://sb.loveli.site/api' + url;
+    var fullUrl = Macro.URL_base + url;
     return await _getReq(fullUrl, params: params, headers: headers);
   }
 
@@ -28,11 +43,18 @@ class Network {
   }
 
   static _postReq(String url, {Map headers, Map params}) async {
-    var jsonParams = utf8.encode(json.encode(params));
-    http.Response response =
-        await http.post(Uri.parse(url), headers: headers, body: jsonParams);
-    var responseBody = json.decode(response.body);
-    return responseBody;
+    var fullUrl = Macro.URL_base + url;
+    if (headers != null && headers.isNotEmpty) {
+      http.Response response =
+          await http.post(Uri.parse(fullUrl), headers: headers, body: params);
+      var responseBody = json.decode(response.body);
+      return responseBody;
+    } else {
+      http.Response response =
+          await http.post(Uri.parse(fullUrl), body: params);
+      var responseBody = json.decode(response.body);
+      return responseBody;
+    }
   }
 
   static Uri _uriWith(String url, {Map queryParameters}) {
@@ -46,7 +68,7 @@ class Network {
   }
 
   static String _urlEncodeMap(data) {
-    StringBuffer urlData = new StringBuffer("");
+    StringBuffer urlData = StringBuffer("");
     bool first = true;
     void urlEncode(dynamic sub, String path) {
       if (sub is List) {

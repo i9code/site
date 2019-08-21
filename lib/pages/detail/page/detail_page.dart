@@ -1,7 +1,6 @@
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/components/header_view.dart';
-//import 'package:flutter_web.examples.hello_world/components/footer_view.dart';
 import 'package:swiftclub/components/markdown/markdown.dart';
 import 'package:swiftclub/network/network.dart';
 

@@ -7,7 +7,7 @@
 //import 'dart:indexed_db';
 
 import 'package:flutter_web/material.dart';
-import 'pages/pages.dart';
+
 import 'package:swiftclub/router/router.dart';
 import 'package:swiftclub/kit/kit.dart';
 
@@ -22,47 +22,8 @@ class SwiftClub extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'swiftclub',
-      onGenerateRoute: (settings) {
-        dynamic args = settings.arguments;
-        switch (settings.name) {
-          case "/login":
-            return SimpleRoute(
-                name: "/login",
-                title: "login",
-                builder: (context) => LoginPage());
-          case "/detail":
-            if (args == null) {
-              // 如果刷新了，这个参数可能不存在，返回首页
-              return SimpleRoute(
-                  name: '/',
-                  title: 'Swiftclub',
-                  builder: (context) => IndexPage());
-            }
-            final topicId = SafeValue.toInt(args['topicId']);
-            return SimpleRoute(
-                name: "detail",
-                title: "detaila",
-                builder: (context) => DetailPage(
-                      topicId: topicId,
-                    ));
-
-          case "/":
-            return SimpleRoute(
-                name: '/',
-                title: 'swiftclub',
-                builder: (context) => IndexPage());
-
-          default:
-            return SimpleRoute(
-                name: 'welcome',
-                title: 'welcome',
-                builder: (_) {
-                  return Center(
-                    child: Text('welcome'),
-                  );
-                });
-        }
-      },
+      theme: ThemeData(fontFamily: "Montserrat"),
+      onGenerateRoute: (setting) => buildRouters(setting),
       initialRoute: "/",
     );
   }

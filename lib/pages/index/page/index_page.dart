@@ -15,19 +15,17 @@ class _IndexPageState extends State<IndexPage> {
 
   List rows = [];
   bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
-    loadData(1);
+    loadData();
   }
 
-  loadData(int page) async {
+  loadData({int page = 1}) async {
     setState(() {
       isLoading = true;
     });
     final response = await Network.getTopics({"page": page, "per": "10"});
-
     setState(() {
       this.response = response;
       isLoading = false;
@@ -43,7 +41,10 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
+    return Scaffold(
+        body: ResponsiveWidget(
+      largeScreen: _buildLargeScreen(context),
+    ));
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -87,7 +88,7 @@ class _IndexPageState extends State<IndexPage> {
               ),
               Container(
                 margin: EdgeInsets.only(left: 20),
-                width: 750,
+                width: MediaQuery.of(context).size.width * 640 / 1024.0,
                 child: Text(
                   'Swift是一种支持多编程范式和编译式的编程语言，是用来撰写macOS/OS X、iOS、watchOS和tvOS的语言之一。 收录Swift频道最新文章和资讯。',
                   style: TextStyle(
@@ -109,7 +110,7 @@ class _IndexPageState extends State<IndexPage> {
     Navigator.pushNamed(context, '/login');
   }
 
-  Widget _buildBody(context) {
+  Widget _buildLargeScreen(context) {
     if (response == null) {
       return Center(
         child: CircularProgressIndicator(),
@@ -123,7 +124,6 @@ class _IndexPageState extends State<IndexPage> {
     var max = SafeValue.toInt(position['max']);
 
     List<Widget> lists = [_buildHeader(context)];
-
     lists.addAll(rows.map((item) {
       return _buildCell(item);
     }).toList());
@@ -137,7 +137,7 @@ class _IndexPageState extends State<IndexPage> {
       if (next < max) {
         lists.add(GestureDetector(
           onTap: () {
-            loadData(next);
+            loadData(page: next);
           },
           child: Container(
             child: Text(
@@ -174,60 +174,65 @@ class _IndexPageState extends State<IndexPage> {
     Map user = SafeValue.toMap(item['user']);
 
     ///
-    var cell = Container(
-        padding: EdgeInsets.fromLTRB(200, 10, 200, 10),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    var cell = Center(
+        child: Container(
+            width: MediaQuery.of(context).size.width * 700 / 1024.0,
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Column(
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.grey[200], width: 1),
-                  ),
-                  width: 45,
-                  height: 45,
-                  alignment: Alignment.center,
-                  child: FadeInImage.assetNetwork(
-                      width: 25,
-                      height: 25,
-                      fit: BoxFit.cover,
-                      placeholder: '',
-                      image: SafeValue.toStr(user['avator'])),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey[200], width: 1),
+                      ),
+                      width: 45,
+                      height: 45,
+                      alignment: Alignment.center,
+                      child: FadeInImage.assetNetwork(
+                          width: 25,
+                          height: 25,
+                          fit: BoxFit.cover,
+                          placeholder: '',
+                          image: SafeValue.toStr(user['avator'])),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                '09-07 10:09',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                SafeValue.toStr(topic['title']),
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          '09-07 10:09',
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          SafeValue.toStr(topic['title']),
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
+                Divider(
+                  color: Colors.grey[200],
                 )
               ],
-            ),
-            Divider(
-              color: Colors.grey[200],
-            )
-          ],
-        ));
+            )));
 
     return GestureDetector(
       child: cell,

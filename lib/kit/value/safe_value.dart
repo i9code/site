@@ -33,4 +33,28 @@ class SafeValue {
     }
     return ret;
   }
+
+  static double toDouble(dynamic value) {
+    if (value is double) {
+      return value;
+    }
+    var ret = double.tryParse(value);
+    if (ret == null) {
+      ret = 0;
+    }
+    return ret;
+  }
+
+  static bool toBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+    if (value is String) {
+      return value == true.toString();
+    }
+    if (value is num) {
+      return value > 0;
+    }
+    return false;
+  }
 }

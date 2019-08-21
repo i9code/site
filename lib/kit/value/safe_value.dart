@@ -24,9 +24,10 @@ class SafeValue {
   }
 
   static int toInt(dynamic value) {
-    if (value is int) {
-      return value;
+    if (value is num) {
+      return value.toInt();
     }
+
     var ret = int.tryParse(value);
     if (ret == null) {
       ret = 0;
@@ -35,8 +36,8 @@ class SafeValue {
   }
 
   static double toDouble(dynamic value) {
-    if (value is double) {
-      return value;
+    if (value is num) {
+      return value.toDouble();
     }
     var ret = double.tryParse(value);
     if (ret == null) {

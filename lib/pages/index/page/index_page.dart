@@ -2,6 +2,7 @@ import 'package:flutter_web/material.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/components/components.dart';
 import 'package:swiftclub/network/network.dart';
+import 'package:intl/intl.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -169,6 +170,28 @@ class _IndexPageState extends State<IndexPage> {
     ));
   }
 
+  String readTimestamp(int timestamp) {
+    var now = DateTime.now();
+    var date = DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+    var diff = date.difference(now);
+    var format = DateFormat('MM-dd');
+    var time = '';
+
+    if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 0) {
+      time = format.format(date);
+    } else {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + 'DAY AGO';
+      } else {
+        time = diff.inDays.toString() + 'DAYS AGO';
+      }
+    }
+    return time;
+  }
+
   Widget _buildCell(Map item) {
     Map topic = SafeValue.toMap(item['topic']);
     Map user = SafeValue.toMap(item['user']);
@@ -210,7 +233,9 @@ class _IndexPageState extends State<IndexPage> {
                             Container(
                               margin: EdgeInsets.only(bottom: 10),
                               child: Text(
-                                '09-07 10:09',
+                                readTimestamp(
+                                        SafeValue.toInt(topic['createdAt'])) +
+                                    '收录',
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 18),
                               ),

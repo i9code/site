@@ -191,6 +191,7 @@ class MarkdownBody extends MarkdownWidget {
 class Markdown extends MarkdownWidget {
   final WidgetBuilder footerBuilder;
   final WidgetBuilder headerBuilder;
+  final bool enableScroll;
 
   /// Creates a scrolling widget that parses and displays Markdown.
   const Markdown({
@@ -201,8 +202,9 @@ class Markdown extends MarkdownWidget {
     MarkdownTapLinkCallback onTapLink,
     this.footerBuilder,
     this.headerBuilder,
+    this.enableScroll = true,
     // Directory imageDirectory,
-    this.padding: const EdgeInsets.all(16.0),
+    this.padding = const EdgeInsets.all(16.0),
   }) : super(
           key: key,
           data: data,
@@ -227,6 +229,15 @@ class Markdown extends MarkdownWidget {
       childs.add(footerBuilder(context));
     }
 
-    return ListView(padding: padding, children: childs);
+    if (enableScroll) {
+      return ListView(padding: padding, children: childs);
+    } else {
+      return ListView(
+        padding: padding,
+        children: childs,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+      );
+    }
   }
 }

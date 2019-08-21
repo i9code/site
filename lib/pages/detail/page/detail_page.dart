@@ -1,6 +1,7 @@
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/components/header_view.dart';
+import 'package:swiftclub/components/footer_view.dart';
 import 'package:swiftclub/components/markdown/markdown.dart';
 import 'package:swiftclub/network/network.dart';
 
@@ -52,20 +53,30 @@ class _DetailPageState extends State<DetailPage>
   }
 
   Widget _buildBody({String contentMd, String title}) {
-    return Markdown(
-      data: contentMd,
-      styleSheet: _markdownCss(),
-      padding: EdgeInsets.fromLTRB(250, 50, 250, 100),
-      headerBuilder: (cxt) {
-        return Container(
-          margin: EdgeInsets.fromLTRB(0, 30, 0, 50),
-          alignment: Alignment.center,
-          child: Text(
-            title,
-            style: TextStyle(color: Color(0xff333333), fontSize: 40),
-          ),
-        );
-      },
+    Widget mdView = Container(
+      width: MediaQuery.of(context).size.width * 740 / 1024.0,
+      child: Markdown(
+        data: contentMd,
+        enableScroll: false,
+        styleSheet: _markdownCss(),
+        padding: EdgeInsets.fromLTRB(0, 50, 0, 100),
+        headerBuilder: (cxt) {
+          return Container(
+            margin: EdgeInsets.fromLTRB(0, 30, 0, 50),
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              style: TextStyle(color: Color(0xff333333), fontSize: 40),
+            ),
+          );
+        },
+      ),
+    );
+
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[mdView, FooterView()],
+      ),
     );
   }
 

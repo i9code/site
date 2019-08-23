@@ -1,8 +1,9 @@
 import 'package:flutter_web/material.dart';
-import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/components/components.dart';
+import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/network/network.dart';
 import 'package:intl/intl.dart';
+import '../view/view.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -48,69 +49,6 @@ class _IndexPageState extends State<IndexPage> {
     ));
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 30),
-      margin: EdgeInsets.only(bottom: 30),
-      decoration: BoxDecoration(
-          color: Color(0xffF9F9FA),
-          border: Border(top: BorderSide(color: Color(0xffF05138), width: 5))),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: _sigin,
-                child: Container(
-                  height: 50,
-                  width: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Color(0xffF05138),
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(20))),
-                  child: Text(
-                    'S',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset('images/swift_logo.png'),
-                width: 100,
-                height: 100,
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 20),
-                width: MediaQuery.of(context).size.width * 640 / 1024.0,
-                child: Text(
-                  'Swift是一种支持多编程范式和编译式的编程语言，是用来撰写macOS/OS X、iOS、watchOS和tvOS的语言之一。 收录Swift频道最新文章和资讯。',
-                  style: TextStyle(
-                    height: 1.5,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width,
-    );
-  }
-
-  _sigin() {
-    Navigator.pushNamed(context, '/login');
-  }
-
   Widget _buildLargeScreen(context) {
     if (response == null) {
       return Center(
@@ -124,7 +62,7 @@ class _IndexPageState extends State<IndexPage> {
     var next = SafeValue.toInt(position['next']);
     var max = SafeValue.toInt(position['max']);
 
-    List<Widget> lists = [_buildHeader(context)];
+    List<Widget> lists = [IndexHeaderView()];
     lists.addAll(rows.map((item) {
       return _buildCell(item);
     }).toList());

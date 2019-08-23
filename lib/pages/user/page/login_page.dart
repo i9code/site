@@ -1,6 +1,7 @@
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/components/components.dart';
 import 'package:swiftclub/kit/kit.dart';
+import 'package:swiftclub/event/event.dart';
 import 'package:swiftclub/network/network.dart';
 
 class LoginPage extends StatefulWidget {
@@ -130,13 +131,20 @@ class _LoginPageState extends State<LoginPage> {
       final response = await Network.userLogin(passwd: passwd, email: email);
       final status = SafeValue.toInt(response['status']);
       final message = SafeValue.toStr(response['message']);
-      print(message);
       if (status == 0) {
-        // 登录成功
-        HudUtil.showSucceedHud(context, text: '登录成功');
-        Static.storage.setJSON(
-            Macro.KEY_storage_token, SafeValue.toMap(response['data']));
-        return Future.value(true);
+        DataHelper.setToken(SafeValue.toMap(response['data']));
+        final userInfoRes = await Network.getAccountInfo();
+        final ustatus = SafeValue.toInt(userInfoRes['status']);
+        final umessage = SafeValue.toStr(userInfoRes['message']);
+        if (ustatus == 0) {
+          HudUtil.showSucceedHud(context, text: '登录成功');
+          DataHelper.setUser(SafeValue.toMap(userInfoRes['data']));
+          eventBus.fire(UserLoginStateChangeEvent(login: true));
+          return Future.value(true);
+        } else {
+          HudUtil.showErrorHud(context, text: umessage);
+          return Future.value(false);
+        }
       } else {
         // 登入失败
         HudUtil.showErrorHud(context, text: message);

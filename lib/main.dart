@@ -12,7 +12,7 @@ import 'package:swiftclub/router/router.dart';
 import 'package:swiftclub/kit/kit.dart';
 
 main() {
-  Static.storage = Storage();
+  DataHelper.setup();
   runApp(SwiftClub());
 }
 

@@ -9,6 +9,11 @@ class HeaderView extends StatefulWidget {
 
 class _HeaderViewState extends State<HeaderView> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Color(0xffF05138),

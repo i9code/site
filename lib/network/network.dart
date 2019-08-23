@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_web/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:swiftclub/kit/data/data_helper.dart';
 import 'package:swiftclub/kit/macro/macro.dart';
 
 class Network {
@@ -8,6 +9,10 @@ class Network {
   /// 请求文章列表
   static getTopics(params) {
     return getReq('/topic/list', params: params);
+  }
+
+  static getAccountInfo() {
+    return getReq('/account/info');
   }
 
   /// 请求文章详情
@@ -29,7 +34,6 @@ class Network {
   }
 
   /// 接口封装
-
   static getReq(String url, {Map params, Map headers}) async {
     var fullUrl = Macro.URL_base + url;
     return await _getReq(fullUrl, params: params, headers: headers);
@@ -37,7 +41,15 @@ class Network {
 
   static _getReq(String url, {Map params, Map headers}) async {
     var reqUri = _uriWith(url, queryParameters: params);
-    http.Response response = await http.get(reqUri, headers: headers);
+    Map<String, String> head = {};
+    if (headers != null && headers.isNotEmpty) {
+      head.addAll(headers);
+    }
+    final accessToken = DataHelper.accessToken();
+    if (accessToken != null && accessToken.isNotEmpty) {
+      head['Authorization'] = 'Bearer $accessToken';
+    }
+    http.Response response = await http.get(reqUri, headers: head);
     var responseBody = json.decode(response.body);
     return responseBody;
   }

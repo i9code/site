@@ -1,6 +1,7 @@
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/pages/pages.dart';
 import 'package:swiftclub/kit/kit.dart';
+import 'package:swiftclub/pages/topic/page/topic_add_page.dart';
 import 'simple_route.dart';
 
 Route<dynamic> buildRouters(RouteSettings settings) {
@@ -22,6 +23,12 @@ Route<dynamic> buildRouters(RouteSettings settings) {
           builder: (context) => DetailPage(
                 topicId: topicId,
               ));
+
+    case "/topicAdd":
+      return SimpleRoute(
+          name: "topicAdd",
+          title: "topoc add",
+          builder: (context) => TopicAddPage());
 
     case "/":
       return defaultRoute();

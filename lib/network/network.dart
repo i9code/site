@@ -11,6 +11,7 @@ class Network {
     return getReq('/topic/list', params: params);
   }
 
+  /// 获取用户账户
   static getAccountInfo() {
     return getReq('/account/info');
   }
@@ -20,9 +21,25 @@ class Network {
     return getReq('/topic/$topicId');
   }
 
+  /// 用户登录
   static userLogin({@required String email, @required String passwd}) {
     return _postReq('/users/login',
         params: {'email': email, 'password': passwd});
+  }
+
+  /// 获取全部主题
+  static getSubjects() {
+    return getReq('/topic/subjects');
+  }
+
+  /// 获取全部 tags
+  static getTags() {
+    return getReq('/topic/tags');
+  }
+
+  /// 创建 topic
+  static createTopic(Map params) {
+    return _postReq('/topic/add', params: params);
   }
 
   static userRegister(
@@ -56,17 +73,17 @@ class Network {
 
   static _postReq(String url, {Map headers, Map params}) async {
     var fullUrl = Macro.URL_base + url;
-    if (headers != null && headers.isNotEmpty) {
-      http.Response response =
-          await http.post(Uri.parse(fullUrl), headers: headers, body: params);
-      var responseBody = json.decode(response.body);
-      return responseBody;
-    } else {
-      http.Response response =
-          await http.post(Uri.parse(fullUrl), body: params);
-      var responseBody = json.decode(response.body);
-      return responseBody;
+    final accessToken = DataHelper.accessToken();
+    if (headers == null || headers.isEmpty) {
+      headers = <String, String>{};
     }
+    if (accessToken != null && accessToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $accessToken';
+    }
+    http.Response response =
+        await http.post(Uri.parse(fullUrl), headers: headers, body: params);
+    var responseBody = json.decode(response.body);
+    return responseBody;
   }
 
   static Uri _uriWith(String url, {Map queryParameters}) {

@@ -122,8 +122,6 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
   _loginShowMenu() {
     // 弹气泡
     final menu = PopupMenu(items: [
-      // MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
-      // MenuItem(title: 'Home', image: Icon(Icons.home, color: Colors.white,)),
       MenuItem(
           title: '写作', textStyle: TextStyle(fontSize: 14, color: Colors.white)),
       MenuItem(
@@ -159,5 +157,7 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
     eventBus.fire(UserLoginStateChangeEvent(login: false));
   }
 
-  _writeTopic() {}
+  _writeTopic() {
+    Navigator.of(context).pushNamed('/topicAdd');
+  }
 }

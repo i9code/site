@@ -63,6 +63,10 @@ class DataHelper {
     _storage.setJSON(Macro.KEY_storage_user, map);
   }
 
+  static String userId() {
+    return SafeValue.toStr(user()['id']);
+  }
+
   static Map user() {
     return SafeValue.toMap(_storage.getJSON(Macro.KEY_storage_user));
   }

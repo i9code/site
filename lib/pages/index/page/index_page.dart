@@ -200,7 +200,6 @@ class _IndexPageState extends State<IndexPage> {
     return GestureDetector(
       child: cell,
       onTap: () {
-        print('topicID:: ${topic['id']}');
         Navigator.of(context).pushNamed('/detail',
             arguments: {"topicId": SafeValue.toInt(topic['id'])});
       },

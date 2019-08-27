@@ -32,6 +32,7 @@ class Topic extends ModelBase {
     topic.collectCount = SafeValue.toInt(json['collectCount']);
     topic.browserCount = SafeValue.toInt(json['browserCount']);
     topic.id = SafeValue.toInt(json['id']);
+    topic.content = SafeValue.toStr(json['content']);
     return topic;
   }
 }

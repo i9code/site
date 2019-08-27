@@ -42,12 +42,28 @@ class Network {
     return _postReq('/topic/add', params: params);
   }
 
+  /// 用户注册
   static userRegister(
       {@required String email,
       @required String name,
       @required String passwd}) {
     return _postReq('/users/register',
         params: {'email': email, 'name': name, 'password': passwd});
+  }
+
+  /// 目录创建
+  static createCatalog(params) {
+    return _postReq('/booklet/catalog/add', params: params);
+  }
+
+  /// 目录列表
+  static getCatalogs() {
+    return getReq('/booklet/catalog');
+  }
+
+  /// 删除目录
+  static deleteCatalog(int catalodId) {
+    return _postReq('/booklet/catalog/delete', params: {"id": '$catalodId'});
   }
 
   /// 接口封装

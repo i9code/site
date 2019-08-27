@@ -30,6 +30,12 @@ Route<dynamic> buildRouters(RouteSettings settings) {
           title: "topoc add",
           builder: (context) => TopicAddPage());
 
+    case "/booklet":
+      return SimpleRoute(
+          name: "booklet",
+          title: "booklet",
+          builder: (context) => BookletPage());
+
     case "/":
       return defaultRoute();
 

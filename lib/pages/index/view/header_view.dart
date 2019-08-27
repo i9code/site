@@ -34,6 +34,8 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
       _writeTopic();
     } else if (menuTitle == '退出') {
       _lougout();
+    } else if (menuTitle == '写书') {
+      _writeBooklet();
     }
   }
 
@@ -125,6 +127,8 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
       MenuItem(
           title: '写作', textStyle: TextStyle(fontSize: 14, color: Colors.white)),
       MenuItem(
+          title: '写书', textStyle: TextStyle(fontSize: 14, color: Colors.white)),
+      MenuItem(
           title: '退出', textStyle: TextStyle(fontSize: 14, color: Colors.white)),
     ], onClickMenu: onClickMenu, onDismiss: onDismiss, maxColumn: 1);
     menu.show(widgetKey: btnKey);
@@ -159,5 +163,9 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
 
   _writeTopic() {
     Navigator.of(context).pushNamed('/topicAdd');
+  }
+
+  _writeBooklet() {
+    Navigator.of(context).pushNamed('/booklet');
   }
 }

@@ -62,8 +62,9 @@ class Network {
   }
 
   /// 删除目录
-  static deleteCatalog(int catalodId) {
-    return _postReq('/booklet/catalog/delete', params: {"id": '$catalodId'});
+  static Future deleteCatalog(int catalodId) async {
+    return await _postReq('/booklet/catalog/delete',
+        params: {"id": '$catalodId'});
   }
 
   /// 接口封装

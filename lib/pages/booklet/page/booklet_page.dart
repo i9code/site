@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/components/components.dart';
 import 'package:swiftclub/models/models.dart';
 import 'package:swiftclub/network/network.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/pages/booklet/model/catalog.dart';
+import 'package:swiftclub/router/pop_route.dart';
 
 class BookletPage extends StatefulWidget {
   @override
@@ -246,7 +249,7 @@ class _BookletPageState extends State<BookletPage> {
             title: '删除',
             textStyle: TextStyle(fontSize: 14, color: Colors.white)),
       ],
-      onClickMenu: (item) async {
+      onClickMenu: (item) {
         onClickMenu(item, catalog);
       },
       onDismiss: onDismiss,
@@ -254,15 +257,27 @@ class _BookletPageState extends State<BookletPage> {
     menu.show(rect: rect);
   }
 
-  void onClickMenu(MenuItemProvider item, Catalog catalog) async {
+  void onClickMenu(MenuItemProvider item, Catalog catalog) {
     String menuTitle = item.menuTitle;
     if (menuTitle == "删除") {
-      Map response = await Network.deleteCatalog(catalog.id);
-      int status = SafeValue.toInt(response['status']);
-      if (status == 0) {
-        _loadBookCatalogs();
-      }
-    } else if (menuTitle == "新建子页面") {}
+      Network.deleteCatalog(catalog.id).then((response) {
+        int status = SafeValue.toInt(response['status']);
+        if (status == 0) {
+          _loadBookCatalogs();
+        }
+      });
+    } else if (menuTitle == "新建子页面") {
+      Navigator.push(
+          context,
+          PopRoute(
+              child: Popup(
+            child: Container(
+              width: 500,
+              height: 500,
+              color: Colors.white,
+            ),
+          )));
+    }
 
     /// 重新加载数据
   }
@@ -294,7 +309,7 @@ class _BookletPageState extends State<BookletPage> {
     Map catalog = {
       "title": "面试题",
       "pid": "1",
-      "path": "0,1",
+      "path": "0",
       "topicId": "1",
       "level": "1",
       "order": "1"

@@ -43,7 +43,7 @@ class Popup extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              color: Colors.transparent,
+              color: Color(0x55000000),
             ),
             Positioned(
                 child: GestureDetector(

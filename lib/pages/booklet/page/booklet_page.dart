@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter_web/material.dart';
 import 'package:swiftclub/components/components.dart';
 import 'package:swiftclub/models/models.dart';
@@ -267,19 +265,115 @@ class _BookletPageState extends State<BookletPage> {
         }
       });
     } else if (menuTitle == "新建子页面") {
-      Navigator.push(
-          context,
-          PopRoute(
-              child: Popup(
-            child: Container(
-              width: 500,
-              height: 500,
-              color: Colors.white,
-            ),
-          )));
+      _popToCreateCatalog(catalog);
     }
+  }
 
-    /// 重新加载数据
+  _popToCreateCatalog(Catalog catalog) {
+    Navigator.push(
+        context,
+        PopRoute(
+            child: Popup(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 800 / 1024.0,
+            height: 500,
+            color: Colors.white,
+            child: _buildCreateCatalogWidget(catalog),
+          ),
+        )));
+  }
+
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+
+  Widget _buildCreateCatalogWidget(Catalog catalog) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextField(
+            controller: _titleController,
+            decoration: InputDecoration(
+                labelText: "标题",
+                hintText: "请输入标题",
+                contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 12)),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey, width: 1),
+              ),
+            ),
+            constraints: BoxConstraints(maxHeight: 300, minHeight: 200),
+            child: TextField(
+              controller: _contentController,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                  labelText: '文章内容',
+                  border: InputBorder.none,
+                  hintText: "请输入文章内容(仅支持 markdown)",
+                  contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 12)),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.only(top: 10, left: 10),
+              child: Builder(builder: (ctx) {
+                return FlatButton(
+                    color: Colors.blue,
+                    child: Text(
+                      '新建文章',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      _createBookCatalog(ctx, catalog);
+                    });
+              }))
+        ],
+      ),
+    );
+  }
+
+  _createBookCatalog(BuildContext ctx, Catalog pCatalog) async {
+    String title = _titleController.text;
+    String content = _contentController.text;
+
+    Map param = {
+      'userId': DataHelper.userId(),
+      'title': title,
+      'subjectId': "5", // 小册
+      'content': content,
+      'textType': "1",
+      'tags': "4", //其他
+    };
+
+    Map topicRes = await Network.createTopic(param);
+    int status = SafeValue.toInt(topicRes['status']);
+    if (status == 0) {
+      Map topicData = SafeValue.toMap(topicRes['data']);
+      String topicId = SafeValue.toStr(topicData['target']);
+
+      String pid = pCatalog == null ? '0' : '${pCatalog.id}';
+      String level = pCatalog == null ? '1' : '${pCatalog.level + 1}';
+      String path = pCatalog == null ? '0' : pCatalog.path + ',${pCatalog.id}';
+      Map catalog = {
+        "title": title,
+        "pid": pid,
+        "path": path,
+        "topicId": topicId,
+        "level": level,
+        "order": "1"
+      };
+
+      Map response = await Network.createCatalog(catalog);
+      status = SafeValue.toInt(response['status']);
+      if (status == 0) {
+        Navigator.of(ctx).pop();
+        _loadBookCatalogs();
+      }
+    }
   }
 
   void onDismiss() {
@@ -306,23 +400,6 @@ class _BookletPageState extends State<BookletPage> {
   }
 
   _createCatalog(context) async {
-    Map catalog = {
-      "title": "面试题",
-      "pid": "1",
-      "path": "0",
-      "topicId": "1",
-      "level": "1",
-      "order": "1"
-    };
-
-    Map response = await Network.createCatalog(catalog);
-    int status = SafeValue.toInt(response['status']);
-    String message = SafeValue.toStr(response['message']);
-    if (status == 0) {
-      HudUtil.showSucceedHud(context, text: '创建成功');
-      _loadBookCatalogs();
-    } else {
-      HudUtil.showErrorHud(context, text: message);
-    }
+    _popToCreateCatalog(null);
   }
 }

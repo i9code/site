@@ -82,6 +82,7 @@ class Network {
     final accessToken = DataHelper.accessToken();
     if (accessToken != null && accessToken.isNotEmpty) {
       head['Authorization'] = 'Bearer $accessToken';
+      head['Content-Type'] = "application/json";
     }
     http.Response response = await http.get(reqUri, headers: head);
     var responseBody = json.decode(response.body);

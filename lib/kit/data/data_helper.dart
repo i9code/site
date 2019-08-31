@@ -68,7 +68,11 @@ class DataHelper {
   }
 
   static Map user() {
-    return SafeValue.toMap(_storage.getJSON(Macro.KEY_storage_user));
+    if (_storage.has(Macro.KEY_storage_user)) {
+      return SafeValue.toMap(_storage.getJSON(Macro.KEY_storage_user));
+    } else {
+      return {};
+    }
   }
 
   static void setToken(Map map) {
@@ -76,7 +80,11 @@ class DataHelper {
   }
 
   static Map _token() {
-    return SafeValue.toMap(_storage.getJSON(Macro.KEY_storage_token));
+    if (_storage.has(Macro.KEY_storage_token)) {
+      return SafeValue.toMap(_storage.getJSON(Macro.KEY_storage_token));
+    } else {
+      return {};
+    }
   }
 
   static String accessToken() {

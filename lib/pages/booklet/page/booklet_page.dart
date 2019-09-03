@@ -183,9 +183,13 @@ class _BookletPageState extends State<BookletPage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           GestureDetector(
-            child: Text(
-              catalog.title,
-              style: TextStyle(color: Colors.white),
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 100),
+              child: Text(
+                catalog.title,
+                maxLines: 2,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             onTap: () => _onTapCatalog(catalog),
           ),
@@ -238,8 +242,11 @@ class _BookletPageState extends State<BookletPage> {
   _catalogEdit(Catalog catalog, Rect rect) {
     // 弹气泡
     final menu = PopupMenu(
-      maxColumn: 2,
+      maxColumn: 3,
       items: [
+        MenuItem(
+            title: '修改',
+            textStyle: TextStyle(fontSize: 14, color: Colors.white)),
         MenuItem(
             title: '新建子页面',
             textStyle: TextStyle(fontSize: 14, color: Colors.white)),
@@ -266,7 +273,23 @@ class _BookletPageState extends State<BookletPage> {
       });
     } else if (menuTitle == "新建子页面") {
       _popToCreateCatalog(catalog);
+    } else if (menuTitle == "修改") {
+      _popToEditCatalog(catalog);
     }
+  }
+
+  _popToEditCatalog(Catalog catalog) {
+    Navigator.push(
+        context,
+        PopRoute(
+            child: Popup(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 800 / 1024.0,
+            height: 500,
+            color: Colors.white,
+            child: _buildEditCatalogWidget(catalog),
+          ),
+        )));
   }
 
   _popToCreateCatalog(Catalog catalog) {
@@ -285,6 +308,100 @@ class _BookletPageState extends State<BookletPage> {
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
+
+  TextEditingController _editTitleController = TextEditingController();
+  TextEditingController _editContentController = TextEditingController();
+
+  Widget _buildEditCatalogWidget(Catalog catalog) {
+    _editTitleController.text = catalog.title;
+
+    return FutureBuilder(
+        future: _loadEditTopic(topicId: catalog.topicId),
+        builder: (ctx, snapshort) {
+          if (snapshort.hasData) {
+            Topic topic = snapshort.data as Topic;
+            _editContentController.text = topic.content;
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextField(
+                    controller: _editTitleController,
+                    decoration: InputDecoration(
+                        labelText: "标题",
+                        contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 12)),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 5),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.grey, width: 1),
+                        ),
+                      ),
+                      constraints:
+                          BoxConstraints(maxHeight: 300, minHeight: 200),
+                      child: TextField(
+                        controller: _editContentController,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                            labelText: '文章内容',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 12)),
+                      )),
+                  Container(
+                      margin: EdgeInsets.only(top: 10, left: 10),
+                      child: Builder(builder: (ctx) {
+                        return FlatButton(
+                            color: Colors.blue,
+                            child: Text(
+                              '更新',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              _editBookCatalog(ctx, catalog, topic);
+                            });
+                      }))
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+  }
+
+  _editBookCatalog(BuildContext ctx, Catalog pCatalog, Topic topic) async {
+    String title = _editTitleController.text;
+    String content = _editContentController.text;
+    debugPrint('title: $title, content: $content');
+    if (title != pCatalog.title) {
+      Map params = {
+        "id": SafeValue.toStr(pCatalog.id),
+        "pid": SafeValue.toStr(pCatalog.pid),
+        "title": title,
+        "path": pCatalog.path,
+        "level": SafeValue.toStr(pCatalog.level),
+        "order": SafeValue.toStr(pCatalog.order),
+        "topicId": SafeValue.toStr(pCatalog.topicId)
+      };
+      await Network.updateCatalog(params);
+    }
+    Map nTopic = {
+      "id": SafeValue.toStr(topic.id),
+      "title": title,
+      "content": content
+    };
+    Map response = await Network.updateTopic(nTopic);
+    int status = SafeValue.toInt(response['status']);
+    if (status == 0) {
+      Navigator.of(ctx).pop();
+      _loadBookCatalogs();
+    }
+  }
 
   Widget _buildCreateCatalogWidget(Catalog catalog) {
     return Container(
@@ -390,9 +507,16 @@ class _BookletPageState extends State<BookletPage> {
     }
   }
 
+  Future<Topic> _loadEditTopic({int topicId}) async {
+    Map response = await Network.getTopicDetail(topicId);
+    Map data = SafeValue.toMap(response['data']);
+    Map topic = SafeValue.toMap(data['topic']);
+    return Future.value(Topic.fromJson(topic));
+  }
+
   _loadTopic() async {
-    Map response =
-        await Network.getTopicDetail(SafeValue.toInt(_selectCatalog.topicId));
+    int topicId = SafeValue.toInt(_selectCatalog.topicId);
+    Map response = await Network.getTopicDetail(topicId);
     Map data = SafeValue.toMap(response['data']);
     Map topic = SafeValue.toMap(data['topic']);
     _currentTopic = Topic.fromJson(topic);

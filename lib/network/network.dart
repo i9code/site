@@ -67,6 +67,16 @@ class Network {
         params: {"id": '$catalodId'});
   }
 
+  /// 更新目录
+  static updateCatalog(Map params) async {
+    return await _postReq('/booklet/catalog/update', params: params);
+  }
+
+  /// 更新文章
+  static updateTopic(Map params) async {
+    return await _postReq('/topic/update', params: params);
+  }
+
   /// 接口封装
   static getReq(String url, {Map params, Map headers}) async {
     var fullUrl = Macro.URL_base + url;

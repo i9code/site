@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import '../flutter_markdown/flutter_markdown.dart' as md;
 import 'syntax_highlighter.dart';
 import 'dart_syntax_highlighter.dart';

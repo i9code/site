@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:swiftclub/components/components.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/network/network.dart';

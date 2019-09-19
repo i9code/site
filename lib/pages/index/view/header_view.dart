@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:swiftclub/event/event.dart';
 import 'package:swiftclub/kit/value/safe_value.dart';
 import 'package:swiftclub/kit/data/data_helper.dart';

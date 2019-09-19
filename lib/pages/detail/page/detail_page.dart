@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/components/header_view.dart';
 import 'package:swiftclub/components/footer_view.dart';

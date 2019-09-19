@@ -2,12 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-//import 'dart:async';
-//import 'dart:html' as prefix0;
-//import 'dart:indexed_db';
-
-import 'package:flutter_web/material.dart';
-
+import 'package:flutter/material.dart';
 import 'package:swiftclub/router/router.dart';
 import 'package:swiftclub/kit/kit.dart';
 

@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:string_scanner/string_scanner.dart';
 import 'syntax_highlighter.dart';
 

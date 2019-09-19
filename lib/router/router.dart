@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:swiftclub/pages/pages.dart';
 import 'package:swiftclub/kit/kit.dart';
 import 'package:swiftclub/pages/topic/page/topic_add_page.dart';

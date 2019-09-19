@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_web/widgets.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:swiftclub/kit/data/data_helper.dart';
 import 'package:swiftclub/kit/macro/macro.dart';

@@ -1,5 +1,5 @@
-import 'package:flutter_web/gestures.dart';
-import 'package:flutter_web/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import '../../markdown/markdown.dart' as md;
 import 'package:meta/meta.dart';
 

@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 
 class PopRoute extends PopupRoute {
   final Duration _duration = Duration(milliseconds: 300);

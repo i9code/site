@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter_web/material.dart';
-import 'package:flutter_web/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 const int _timeSeconds = 1;
 

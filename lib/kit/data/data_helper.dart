@@ -1,45 +1,41 @@
 import 'dart:convert';
-import 'dart:ui';
-import 'package:universal_html/prefer_sdk/html.dart';
 import 'package:swiftclub/kit/macro/macro.dart';
+import 'local_storage.dart';
 import 'package:swiftclub/kit/value/safe_value.dart';
-
-// final _localStorage = window.localStorage;
-final _localStorage = {};
 
 class Storage {
   /// 类管理
   int getInt(String key) {
-    if (_localStorage.containsKey(key)) {
-      return int.tryParse(_localStorage[key]);
+    if (has(key)) {
+      return int.tryParse(localStorage.getItem(key));
     }
     return null;
   }
 
   void setInt(String key, int value) {
-    _localStorage[key] = '$value';
+    localStorage.setItem(key, '$value');
   }
 
   String getString(String key) {
-    if (_localStorage.containsKey(key)) {
-      return _localStorage[key];
+    if (has(key)) {
+      return localStorage.getItem(key);
     }
     return '';
   }
 
   void setString(String key, String value) {
-    _localStorage[key] = '$value';
+    localStorage.setItem(key, '$value');
   }
 
   bool getBool(String key) {
-    if (_localStorage.containsKey(key)) {
-      return _localStorage[key] == 'true';
+    if (has(key)) {
+      return localStorage.getItem(key) == 'true';
     }
     return false;
   }
 
   void setBool(String key, bool value) {
-    _localStorage[key] = '$value';
+    localStorage.setItem(key, '$value');
   }
 
   Map<String, dynamic> getJSON(String key) {
@@ -51,7 +47,7 @@ class Storage {
   }
 
   bool has(String key) {
-    return _localStorage[key] != null;
+    return localStorage.getItem(key) != null;
   }
 }
 

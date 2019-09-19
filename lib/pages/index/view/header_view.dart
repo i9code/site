@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiftclub/event/event.dart';
+import 'package:swiftclub/kit/macro/macro.dart';
 import 'package:swiftclub/kit/value/safe_value.dart';
 import 'package:swiftclub/kit/data/data_helper.dart';
 import 'package:swiftclub/components/popup_menu/popup_menu.dart';
@@ -69,7 +70,10 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
             children: <Widget>[
               Container(
                 alignment: Alignment.center,
-                child: Image.asset('images/swift_logo.png'),
+                child: Image.asset(
+                  'swift_logo.png',
+                  package: Macro.AssetsPackage,
+                ),
                 width: 100,
                 height: 100,
               ),

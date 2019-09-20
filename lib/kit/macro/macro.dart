@@ -1,6 +1,6 @@
 class Macro {
-  static const String IMG_swift_logo = "swift_logo.png";
-  static const String AssetsPackage = '';
+  static const String IMG_swift_logo = "assets/swift_logo.png";
+
   static const String URL_base = 'https://sb.loveli.site/api';
   // static const String URL_base = 'http://127.0.0.1:8977/api';
 

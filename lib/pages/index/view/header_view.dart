@@ -71,8 +71,7 @@ class _IndexHeaderViewState extends State<IndexHeaderView> {
               Container(
                 alignment: Alignment.center,
                 child: Image.asset(
-                  'swift_logo.png',
-                  package: Macro.AssetsPackage,
+                  Macro.IMG_swift_logo,
                 ),
                 width: 100,
                 height: 100,
